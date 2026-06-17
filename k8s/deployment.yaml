@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-cicd-app
+  namespace: default
+  labels:
+    app: k8s-cicd-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: k8s-cicd-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: k8s-cicd-app
+    spec:
+      containers:
+      - name: k8s-cicd-app
+        # REPLACE with your Docker Hub username below:
+        # image: YOUR_DOCKERHUB_USERNAME/k8s-cicd-app:latest
+        image: python:3.11-slim
+        command: ["sh", "-c", "pip install flask gunicorn -q && python -c \"
+from flask import Flask, jsonify; import socket
+app = Flask(__name__)
+@app.route('/'); home = lambda: '<h1>Hello from Kubernetes!</h1><p>Pod: ' + socket.gethostname() + '</p>'
+@app.route('/health'); health = lambda: jsonify({'status':'ok'})
+app.run(host='0.0.0.0', port=5000)
+\""]
+        ports:
+        - containerPort: 5000
+          name: http
+        env:
+        - name: APP_VERSION
+          value: "v1.0.0"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 20
+          periodSeconds: 10
