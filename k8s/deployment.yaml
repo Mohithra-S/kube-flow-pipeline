@@ -22,13 +22,13 @@ spec:
     spec:
       containers:
       - name: k8s-cicd-app
-        image: mohithra/k8s-cicd-app:latest
+        image: mohithra/k8s-cicd-app:856eba20
         ports:
         - containerPort: 5000
           name: http
         env:
         - name: APP_VERSION
-          value: "v1.0.0"
+          value: "856eba20"
         resources:
           requests:
             memory: "64Mi"
