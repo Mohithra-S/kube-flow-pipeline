@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     # REPLACE with your GitHub repo URL:
-    repoURL: https://github.com/YOUR_GITHUB_USERNAME/k8s-cicd-project
+    repoURL: https://github.com/Mohithra-S/kube-flow-pipeline.git
     targetRevision: main
     path: k8s
   destination:

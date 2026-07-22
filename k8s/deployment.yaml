@@ -23,7 +23,7 @@ spec:
       containers:
       - name: k8s-cicd-app
         # REPLACE with your Docker Hub username below:
-        # image: YOUR_DOCKERHUB_USERNAME/k8s-cicd-app:latest
+        image: mohithra/k8s-cicd-app:latest
         image: python:3.11-slim
         command: ["sh", "-c", "pip install flask gunicorn -q && python -c \"
 from flask import Flask, jsonify; import socket
